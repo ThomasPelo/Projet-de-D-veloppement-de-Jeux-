@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34723.18
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Puissance4-Jeu", "Puissance4-Jeu\Puissance4-Jeu.csproj", "{4887B1CE-AF8D-4E54-B86D-E3175D46738B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4887B1CE-AF8D-4E54-B86D-E3175D46738B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4887B1CE-AF8D-4E54-B86D-E3175D46738B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4887B1CE-AF8D-4E54-B86D-E3175D46738B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4887B1CE-AF8D-4E54-B86D-E3175D46738B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4997EE74-E646-4828-A431-24C38ED582FE}
+	EndGlobalSection
+EndGlobal
