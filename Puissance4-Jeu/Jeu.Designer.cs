@@ -30,6 +30,7 @@
         {
             textBox1 = new TextBox();
             pictureBox1 = new PictureBox();
+            textBox2 = new TextBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -37,9 +38,9 @@
             // 
             textBox1.Location = new Point(328, 22);
             textBox1.Name = "textBox1";
+            textBox1.ReadOnly = true;
             textBox1.Size = new Size(125, 27);
             textBox1.TabIndex = 0;
-            textBox1.Text = "Puissance 4";
             // 
             // pictureBox1
             // 
@@ -52,11 +53,21 @@
             pictureBox1.TabStop = false;
             pictureBox1.MouseClick += pictureBox1_Click;
             // 
+            // textBox2
+            // 
+            textBox2.Location = new Point(197, 22);
+            textBox2.Name = "textBox2";
+            textBox2.ReadOnly = true;
+            textBox2.Size = new Size(125, 27);
+            textBox2.TabIndex = 2;
+            textBox2.Text = "Au tour de :";
+            // 
             // Jeu
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1902, 1033);
+            Controls.Add(textBox2);
             Controls.Add(pictureBox1);
             Controls.Add(textBox1);
             Name = "Jeu";
@@ -72,5 +83,6 @@
 
         private TextBox textBox1;
         private PictureBox pictureBox1;
+        private TextBox textBox2;
     }
 }

@@ -13,43 +13,43 @@ namespace Puissance4_Jeu
 {
     public partial class Jeu : Form
     {
-        private int adversaire;
+        private CLassePuissance4 classe_puissance4;
         public Jeu(int adversaire)
         {
             InitializeComponent();
-            this.adversaire = adversaire;
+            classe_puissance4 = new(adversaire);
+            this.textBox1.DataBindings.Add("Text", classe_puissance4, "joueur_actuel", false, DataSourceUpdateMode.OnPropertyChanged);
+
         }
 
         private void Jeu_Load(object sender, EventArgs e)
         {
-            // faire une class
-            //int[,] matrice = new int[6, 7];
-            this.textBox1.Text = adversaire == 0 ? "Joueur" : "Robot";
             affichage();
         }
 
         private void affichage()
         {
-
+            // faire 7 groupboxs qui contiennent 6 pictureboxs
+            // comme ça je sais que chaque groupbox est une colonne
         }
 
         private void pictureBox1_Click(object sender, MouseEventArgs e)
         {
-
-            PictureBox pb = sender as PictureBox;
-
-            if (pb != null)
+            if (sender is PictureBox)
             {
-                PictureBox nouveau = new();
-                nouveau.Image = Properties.Resources.jeton_rouge;
-                nouveau.SizeMode = PictureBoxSizeMode.Zoom;
-                nouveau.Width = 50;    
-                nouveau.Height = 50;
-                nouveau.Location = new Point(e.X, e.Y);
+                classe_puissance4.AQuiLeTour();
+                PictureBox nouveau = new()
+                {
+                    Image = this.textBox1.Text == "Joueur 1" ? Properties.Resources.jeton_rouge : Properties.Resources.jeton_jaune,
+                    SizeMode = PictureBoxSizeMode.Zoom,
+                    Width = 50,
+                    Height = 50,
+                    Location = new Point(e.X, e.Y)
+                };
 
                 this.Controls.Add(nouveau);
                 nouveau.BringToFront();
-            }   
+            }
         }
     }
 }

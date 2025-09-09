@@ -23,10 +23,7 @@ namespace Puissance4_Jeu
 
         private void radioButton_CheckedChanged(object sender, EventArgs e)
         {
-
-            RadioButton rb = sender as RadioButton;
-
-            if (rb != null && rb.Checked)
+            if (sender is RadioButton rb && rb.Checked)
             {
                 adversaire = rb.Name == "radioButtonJoueur" ? 0 : 1;
             }

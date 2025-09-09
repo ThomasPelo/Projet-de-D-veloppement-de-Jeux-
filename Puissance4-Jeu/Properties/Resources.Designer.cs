@@ -73,6 +73,16 @@ namespace Puissance4_Jeu.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap jeton_jaune {
+            get {
+                object obj = ResourceManager.GetObject("jeton_jaune", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap jeton_rouge {
             get {
                 object obj = ResourceManager.GetObject("jeton_rouge", resourceCulture);
