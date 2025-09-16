@@ -74,7 +74,7 @@ namespace Puissance4_Jeu
 
         private void BoardPanel_MouseClick(object sender, MouseEventArgs e)
         {
-            // Même calcul que dans Paint (important : utiliser e.Location relatif au panel)
+ 
             int cellW = (boardPanel.ClientSize.Width - (colonnes - 1) * marge) / colonnes;
             int cellH = (boardPanel.ClientSize.Height - (lignes - 1) * marge) / lignes;
             int d = Math.Min(cellW, cellH);
@@ -84,24 +84,27 @@ namespace Puissance4_Jeu
             int offsetX = (boardPanel.ClientSize.Width - largeurPlateau) / 2;
             int offsetY = (boardPanel.ClientSize.Height - hauteurPlateau) / 2;
 
-            for (int i = 0; i < lignes; i++)
+            for (int j = 0; j < colonnes; j++)
             {
-                for (int j = 0; j < colonnes; j++)
-                {
-                    Rectangle r = new Rectangle(
-                        offsetX + j * (d + marge),
-                        offsetY + i * (d + marge),
-                        d, d);
+                int x = offsetX + j * (d + marge);
+                Rectangle colonneRect = new Rectangle(x, offsetY, d, hauteurPlateau);
 
-                    if (r.Contains(e.Location))
+                if (colonneRect.Contains(e.Location))
+                {
+                    for (int i = lignes - 1; i >= 0; i--)
                     {
-                        // toggle blanc <-> rouge
-                        grille[i, j] = (grille[i, j] == 0) ? 1 : 0;
-                        boardPanel.Invalidate(r); // redessine juste la case cliquée
-                        return;
+                        if (grille[i, j] == 0) 
+                        {
+                            grille[i, j] = 1; 
+                            boardPanel.Invalidate(); 
+                            return;
+                        }
                     }
+                    MessageBox.Show("La colonne est pleine !");
+                    return;
                 }
             }
         }
+
     }
 }

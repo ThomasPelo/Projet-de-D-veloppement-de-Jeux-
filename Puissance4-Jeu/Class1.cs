@@ -8,13 +8,7 @@ namespace Back
 {
     internal class BackPuissance4
     {
-        static void Main()
-        {
-            int[,] grille = GenererTableau2D(6, 7);
-            AfficherGrille(grille);
-
-            Console.WriteLine(VerifierVictoire(grille, 0));
-        }
+ 
 
 
         static bool VerifierVictoire(int[,] grille, int valeur)
