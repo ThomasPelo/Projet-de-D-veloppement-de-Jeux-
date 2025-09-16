@@ -29,9 +29,7 @@
         private void InitializeComponent()
         {
             textBox1 = new TextBox();
-            pictureBox1 = new PictureBox();
             textBox2 = new TextBox();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // textBox1
@@ -41,17 +39,6 @@
             textBox1.ReadOnly = true;
             textBox1.Size = new Size(125, 27);
             textBox1.TabIndex = 0;
-            // 
-            // pictureBox1
-            // 
-            pictureBox1.Image = Properties.Resources.images;
-            pictureBox1.Location = new Point(43, 69);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(745, 369);
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox1.TabIndex = 1;
-            pictureBox1.TabStop = false;
-            pictureBox1.MouseClick += pictureBox1_Click;
             // 
             // textBox2
             // 
@@ -68,13 +55,11 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1902, 1033);
             Controls.Add(textBox2);
-            Controls.Add(pictureBox1);
             Controls.Add(textBox1);
             Name = "Jeu";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Jeu";
             Load += Jeu_Load;
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -82,7 +67,6 @@
         #endregion
 
         private TextBox textBox1;
-        private PictureBox pictureBox1;
         private TextBox textBox2;
     }
 }
