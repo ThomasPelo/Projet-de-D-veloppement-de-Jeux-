@@ -7,7 +7,6 @@ namespace Puissance4_Jeu
     public partial class Jeu : Form
     {
         private CLassePuissance4 classe_puissance4;
-
         private const int colonnes = 7;
         private const int lignes = 6;
         private const int marge = 10; 
