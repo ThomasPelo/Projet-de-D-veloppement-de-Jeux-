@@ -41,7 +41,7 @@ namespace Puissance4_Jeu
         }
 
         private void Jeu_Load(object sender, EventArgs e)
-        {
+        {   
             boardPanel.Invalidate();
         }
 
