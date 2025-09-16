@@ -21,35 +21,51 @@ namespace Puissance4_Jeu
             this.adversaire = adversaire == 0 ? "Joueur 2" : "Robot";
             joueur_actuel = "Joueur 1";
             matrice_map = new int[6, 7];
-            tour = 1;
-        }
-        public int AQuiLeTour()
-        {
-            tour = (tour+1)%2;
-            joueur_actuel = tour % 2 == 0 ? "Joueur 1" : adversaire;
-            OnPropertyChanged(nameof(joueur_actuel));
-            return tour;
-        }
-
-        public int ouVaLeJeton(int colonne)
-        {
-            // parcourir la colonne de bas en haut
-            for (int i = 5; i >=0; i--)
+            // 2 partout pour set blanc côté front
+            for (int i = 0; i < 6; i++)
             {
-                // 0 pas de jeton
-                // 1 jeton joueur 1
-                // 2 jeton joueur 2
-                if (matrice_map[i, colonne] == 0)
+                for (int j = 0; j < 7; j++)
                 {
-                    matrice_map[i, colonne] = tour;
-                    if (VerifierVictoire(i, colonne))
-                    {
-
-                    }
-                    return i;
+                    matrice_map[i, j] = 2;
                 }
             }
-            return -1;
+            // joueur 1 commence
+            tour = 0;
+        }
+        public int[,] GetMatrice()
+        {
+            return matrice_map;
+        }
+
+        public void AQuiLeTour()
+        {
+            tour = (tour+1)%2;
+            joueur_actuel = tour == 1 ? "Joueur 1" : adversaire;
+            OnPropertyChanged(nameof(joueur_actuel));
+        }
+
+        public (int,int) ouVaLeJeton(int colonne)
+        {
+            // parcourir la colonne de bas en haut
+            for (int ligne = 5; ligne >= 0; ligne--)
+            {
+                // 0 jeton joueur 1
+                // 1 jeton joueur 2
+                // 2 pas de jeton
+                if (matrice_map[ligne, colonne] == 2)
+                {
+                    // ligne dispo dans une colonne donc on met le jeton
+                    matrice_map[ligne, colonne] = tour;
+                    if (VerifierVictoire(ligne, colonne))
+                    {
+                        // victoire
+                        return (-2, ligne);
+                    }
+                    return (0,ligne);
+                }
+            }
+            // colonne pleine
+            return (-1, -1);
         }
 
         public bool VerifierVictoire(int ligne, int colonne)

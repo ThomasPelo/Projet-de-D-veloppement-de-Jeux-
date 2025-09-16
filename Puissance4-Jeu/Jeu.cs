@@ -8,8 +8,6 @@ namespace Puissance4_Jeu
     {
         private CLassePuissance4 classe_puissance4;
         private int diametre = 35;
-        private int[,] grille;
-
         private Panel boardPanel;
         private const int colonnes = 7;
         private const int lignes = 6;
@@ -34,15 +32,6 @@ namespace Puissance4_Jeu
             boardPanel.SendToBack();
 
             this.DoubleBuffered = true;
-
-            grille = new int[lignes, colonnes];
-            for (int i = 0; i < lignes; i++)
-            {
-                for (int j = 0; j < colonnes; j++)
-                {
-                    grille[i, j] = 2;
-                }
-            }
         }
 
         private void Jeu_Load(object sender, EventArgs e)
@@ -70,7 +59,7 @@ namespace Puissance4_Jeu
                     int x = offsetX + j * (diametre + marge);
                     int y = offsetY + i * (diametre + marge);
 
-                    Brush b = grille[i, j] switch
+                    Brush b = classe_puissance4.GetMatrice()[i, j] switch
                     {
                         1 => Brushes.Yellow,
                         0 => Brushes.Red,
@@ -102,13 +91,40 @@ namespace Puissance4_Jeu
                     Rectangle r = new(
                         offsetX + j * (d + marge),
                         offsetY + i * (d + marge),
-                        d, d);
+                        d, d
+                    );
 
+                    // on cherche sur quel cerlce dans le BoardPanel l'event a eu lieu à travers un rectangle
                     if (r.Contains(e.Location))
                     {
-                        // toggle blanc <-> rouge
-                        grille[i, j] = classe_puissance4.AQuiLeTour();
-                        boardPanel.Invalidate(r); // redessine juste la case cliquée
+                        // on a appuyé sur une colonne mais ou va le jeton ?
+                        (int,int) i_jeton = classe_puissance4.ouVaLeJeton(j);
+                        if (i_jeton.Item1 != -1)
+                        {
+                            // il y a de la place
+                            r = new Rectangle(
+                                offsetX + j * (d + marge),
+                                offsetY + i_jeton.Item2 * (d + marge),
+                                d, d
+                            );
+                            // redessine juste la case cliquée
+                            boardPanel.Invalidate(r);                             
+                            if (i_jeton.Item1 == -2)
+                            {
+                                // victoire
+                                MessageBox.Show("Le " + textBox1.Text + " a gagné");
+                            }
+                            else
+                            {
+                                // prochain tour
+                                classe_puissance4.AQuiLeTour();
+                            }
+                        }
+                        else
+                        {
+                            // colonne pleine
+                            MessageBox.Show("Colonne pleine !");
+                        }
                         return;
                     }
                 }
