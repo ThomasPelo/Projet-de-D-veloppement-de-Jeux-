@@ -12,9 +12,14 @@ namespace Puissance4_Jeu
         private const int colonnes = 7;
         private const int lignes = 6;
         private const int marge = 10;
+        private const int margeVerticale = 30; // marge en haut et en bas
+
         public Jeu(int adversaire)
         {
             InitializeComponent();
+            this.WindowState = FormWindowState.Maximized;
+            this.FormBorderStyle = FormBorderStyle.None; // si tu veux cacher la barre Windows
+
             classe_puissance4 = new(adversaire);
             this.textBox1.DataBindings.Add("Text", classe_puissance4, "joueur_actuel", false, DataSourceUpdateMode.OnPropertyChanged);
 
@@ -43,14 +48,15 @@ namespace Puissance4_Jeu
         {
             Graphics g = e.Graphics;
 
+            // Prend en compte la marge verticale pour calculer la taille
             int cellW = (boardPanel.ClientSize.Width - (colonnes - 1) * marge) / colonnes;
-            int cellH = (boardPanel.ClientSize.Height - (lignes - 1) * marge) / lignes;
+            int cellH = (boardPanel.ClientSize.Height - (lignes - 1) * marge - 2 * margeVerticale) / lignes;
             diametre = Math.Max(4, Math.Min(cellW, cellH));
 
             int largeurPlateau = colonnes * diametre + (colonnes - 1) * marge;
             int hauteurPlateau = lignes * diametre + (lignes - 1) * marge;
             int offsetX = (boardPanel.ClientSize.Width - largeurPlateau) / 2;
-            int offsetY = (boardPanel.ClientSize.Height - hauteurPlateau) / 2;
+            int offsetY = margeVerticale; // fixe la marge en haut
 
             for (int i = 0; i < lignes; i++)
             {
@@ -74,15 +80,15 @@ namespace Puissance4_Jeu
 
         private void BoardPanel_MouseClick(object sender, MouseEventArgs e)
         {
-            // Même calcul que dans Paint (important : utiliser e.Location relatif au panel)
+            // Même calcul que dans Paint
             int cellW = (boardPanel.ClientSize.Width - (colonnes - 1) * marge) / colonnes;
-            int cellH = (boardPanel.ClientSize.Height - (lignes - 1) * marge) / lignes;
+            int cellH = (boardPanel.ClientSize.Height - (lignes - 1) * marge - 2 * margeVerticale) / lignes;
             int d = Math.Min(cellW, cellH);
 
             int largeurPlateau = colonnes * d + (colonnes - 1) * marge;
             int hauteurPlateau = lignes * d + (lignes - 1) * marge;
             int offsetX = (boardPanel.ClientSize.Width - largeurPlateau) / 2;
-            int offsetY = (boardPanel.ClientSize.Height - hauteurPlateau) / 2;
+            int offsetY = margeVerticale; // même marge en haut
 
             for (int i = 0; i < lignes; i++)
             {
@@ -94,11 +100,9 @@ namespace Puissance4_Jeu
                         d, d
                     );
 
-                    // on cherche sur quel cerlce dans le BoardPanel l'event a eu lieu à travers un rectangle
                     if (r.Contains(e.Location))
                     {
-                        // on a appuyé sur une colonne mais ou va le jeton ?
-                        (int,int) i_jeton = classe_puissance4.ouVaLeJeton(j);
+                        (int, int) i_jeton = classe_puissance4.ouVaLeJeton(j);
                         if (i_jeton.Item1 != -1)
                         {
                             // il y a de la place
@@ -107,22 +111,19 @@ namespace Puissance4_Jeu
                                 offsetY + i_jeton.Item2 * (d + marge),
                                 d, d
                             );
-                            // redessine juste la case cliquée
-                            boardPanel.Invalidate(r);                             
+
+                            boardPanel.Invalidate(r);
                             if (i_jeton.Item1 == -2)
                             {
-                                // victoire
                                 MessageBox.Show("Le " + textBox1.Text + " a gagné");
                             }
                             else
                             {
-                                // prochain tour
                                 classe_puissance4.AQuiLeTour();
                             }
                         }
                         else
                         {
-                            // colonne pleine
                             MessageBox.Show("Colonne pleine !");
                         }
                         return;
