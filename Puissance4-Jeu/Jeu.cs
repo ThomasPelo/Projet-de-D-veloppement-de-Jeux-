@@ -12,7 +12,7 @@ namespace Puissance4_Jeu
         private const int colonnes = 7;
         private const int lignes = 6;
         private const int marge = 10;
-        private const int margeVerticale = 30; // marge en haut et en bas
+        private const int margeVerticale = 30; // marge en haut et en bas +
 
         public Jeu(int adversaire)
         {
