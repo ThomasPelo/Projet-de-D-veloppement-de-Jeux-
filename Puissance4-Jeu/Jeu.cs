@@ -31,7 +31,9 @@ namespace Puissance4_Jeu
             this.Controls.Add(boardPanel);
             boardPanel.SendToBack();
 
-            this.DoubleBuffered = true;
+            //this.DoubleBuffered = true;
+            this.WindowState = FormWindowState.Maximized;
+            this.FormBorderStyle = FormBorderStyle.None;
         }
 
         private void Jeu_Load(object sender, EventArgs e)
@@ -45,7 +47,7 @@ namespace Puissance4_Jeu
 
             int cellW = (boardPanel.ClientSize.Width - (colonnes - 1) * marge) / colonnes;
             int cellH = (boardPanel.ClientSize.Height - (lignes - 1) * marge) / lignes;
-            diametre = Math.Max(4, Math.Min(cellW, cellH));
+            diametre = Math.Min(cellW, cellH);
 
             int largeurPlateau = colonnes * diametre + (colonnes - 1) * marge;
             int hauteurPlateau = lignes * diametre + (lignes - 1) * marge;
@@ -98,21 +100,23 @@ namespace Puissance4_Jeu
                     if (r.Contains(e.Location))
                     {
                         // on a appuyé sur une colonne mais ou va le jeton ?
-                        (int,int) i_jeton = classe_puissance4.ouVaLeJeton(j);
+                        (int, int) i_jeton = classe_puissance4.ouVaLeJeton(j);
                         if (i_jeton.Item1 != -1)
                         {
                             // il y a de la place
-                            r = new Rectangle(
+                            Rectangle jeton = new Rectangle(
                                 offsetX + j * (d + marge),
                                 offsetY + i_jeton.Item2 * (d + marge),
                                 d, d
                             );
                             // redessine juste la case cliquée
-                            boardPanel.Invalidate(r);                             
+                            boardPanel.Invalidate(jeton);
                             if (i_jeton.Item1 == -2)
                             {
                                 // victoire
                                 MessageBox.Show("Le " + textBox1.Text + " a gagné");
+                                Application.OpenForms[0].Show();
+                                this.Close();
                             }
                             else
                             {
@@ -124,6 +128,35 @@ namespace Puissance4_Jeu
                         {
                             // colonne pleine
                             MessageBox.Show("Colonne pleine !");
+                        }
+
+                        // si robot
+                        if (classe_puissance4.GetAdversaire() == "Robot")
+                        {
+                            // tour de l'ordi
+                            int col_ordi = classe_puissance4.JouerCoupRobot();
+                            (int, int) coord = classe_puissance4.JouerCoup(col_ordi);
+                            if (coord.Item1 != 1)
+                            {
+                                r = new Rectangle(
+                                    offsetX + col_ordi * (d + marge),
+                                    offsetY + coord.Item2 * (d + marge),
+                                    d, d
+                                );
+                                boardPanel.Invalidate(r);
+                                if (coord.Item1 == -2)
+                                {
+                                    // victoire
+                                    MessageBox.Show("L'ordinateur a gagné");
+                                    Application.OpenForms[0].Show();
+                                    this.Close();
+                                }
+                                else
+                                {
+                                    // prochain tour
+                                    classe_puissance4.AQuiLeTour();
+                                }
+                            }
                         }
                         return;
                     }
