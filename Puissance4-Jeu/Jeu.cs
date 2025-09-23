@@ -12,9 +12,14 @@ namespace Puissance4_Jeu
         private const int colonnes = 7;
         private const int lignes = 6;
         private const int marge = 10;
+        private const int margeVerticale = 30; // marge en haut et en bas +
+
         public Jeu(int adversaire)
         {
             InitializeComponent();
+            this.WindowState = FormWindowState.Maximized;
+            this.FormBorderStyle = FormBorderStyle.None; // si tu veux cacher la barre Windows
+
             classe_puissance4 = new(adversaire);
             this.textBox1.DataBindings.Add("Text", classe_puissance4, "joueur_actuel", false, DataSourceUpdateMode.OnPropertyChanged);
 
@@ -96,7 +101,6 @@ namespace Puissance4_Jeu
                         d, d
                     );
 
-                    // on cherche sur quel cerlce dans le BoardPanel l'event a eu lieu à travers un rectangle
                     if (r.Contains(e.Location))
                     {
                         // on a appuyé sur une colonne mais ou va le jeton ?
@@ -113,20 +117,17 @@ namespace Puissance4_Jeu
                             boardPanel.Invalidate(jeton);
                             if (i_jeton.Item1 == -2)
                             {
-                                // victoire
                                 MessageBox.Show("Le " + textBox1.Text + " a gagné");
                                 Application.OpenForms[0].Show();
                                 this.Close();
                             }
                             else
                             {
-                                // prochain tour
                                 classe_puissance4.AQuiLeTour();
                             }
                         }
                         else
                         {
-                            // colonne pleine
                             MessageBox.Show("Colonne pleine !");
                         }
 
