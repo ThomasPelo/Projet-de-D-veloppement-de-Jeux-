@@ -37,9 +37,11 @@
             // 
             // button1
             // 
-            button1.Location = new Point(327, 331);
+            button1.Font = new Font("Poppins ExtraBold", 12F, FontStyle.Bold);
+            button1.ForeColor = Color.Black;
+            button1.Location = new Point(319, 285);
             button1.Name = "button1";
-            button1.Size = new Size(94, 29);
+            button1.Size = new Size(180, 74);
             button1.TabIndex = 0;
             button1.Text = "Jouer";
             button1.UseVisualStyleBackColor = true;
@@ -47,27 +49,37 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(307, 37);
+            textBox1.BorderStyle = BorderStyle.FixedSingle;
+            textBox1.Font = new Font("Poppins ExtraBold", 12F, FontStyle.Bold);
+            textBox1.Location = new Point(259, 56);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(125, 27);
+            textBox1.ReadOnly = true;
+            textBox1.Size = new Size(300, 37);
             textBox1.TabIndex = 1;
             textBox1.Text = "Puissance 4";
+            textBox1.TextAlign = HorizontalAlignment.Center;
             // 
             // textBox3
             // 
-            textBox3.Location = new Point(307, 111);
+            textBox3.BackColor = SystemColors.Control;
+            textBox3.BorderStyle = BorderStyle.FixedSingle;
+            textBox3.Font = new Font("Poppins ExtraBold", 12F, FontStyle.Bold);
+            textBox3.Location = new Point(259, 111);
             textBox3.Name = "textBox3";
-            textBox3.Size = new Size(211, 27);
+            textBox3.Size = new Size(300, 37);
             textBox3.TabIndex = 3;
             textBox3.Text = "Choissisez votre adversaire :";
+            textBox3.TextAlign = HorizontalAlignment.Center;
             // 
             // radioButtonJoueur
             // 
             radioButtonJoueur.AutoSize = true;
             radioButtonJoueur.Checked = true;
+            radioButtonJoueur.Cursor = Cursors.Hand;
+            radioButtonJoueur.Font = new Font("Poppins ExtraBold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             radioButtonJoueur.Location = new Point(307, 183);
             radioButtonJoueur.Name = "radioButtonJoueur";
-            radioButtonJoueur.Size = new Size(73, 24);
+            radioButtonJoueur.Size = new Size(110, 40);
             radioButtonJoueur.TabIndex = 4;
             radioButtonJoueur.TabStop = true;
             radioButtonJoueur.Text = "Joueur";
@@ -77,11 +89,12 @@
             // radioButton2
             // 
             radioButton2.AutoSize = true;
+            radioButton2.Cursor = Cursors.Hand;
+            radioButton2.Font = new Font("Poppins ExtraBold", 12F, FontStyle.Bold);
             radioButton2.Location = new Point(441, 183);
             radioButton2.Name = "radioButton2";
-            radioButton2.Size = new Size(71, 24);
+            radioButton2.Size = new Size(97, 40);
             radioButton2.TabIndex = 5;
-            radioButton2.TabStop = true;
             radioButton2.Text = "Robot";
             radioButton2.UseVisualStyleBackColor = true;
             radioButton2.CheckedChanged += radioButton_CheckedChanged;
@@ -90,6 +103,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ActiveCaption;
             ClientSize = new Size(800, 450);
             Controls.Add(radioButton2);
             Controls.Add(radioButtonJoueur);
