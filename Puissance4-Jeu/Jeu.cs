@@ -6,18 +6,18 @@ namespace Puissance4_Jeu
 {
     public partial class Jeu : Form
     {
-        private CLassePuissance4 classe_puissance4;
-        private int diametre = 35;
-        private Panel boardPanel;
+        private readonly CLassePuissance4 classe_puissance4;
+        private readonly Panel boardPanel;
         private const int colonnes = 7;
         private const int lignes = 6;
         private const int marge = 10;
+        private bool partieTerminee = false;
 
         public Jeu(int adversaire)
         {
             InitializeComponent();
+            this.FormBorderStyle = FormBorderStyle.Sizable;
             this.WindowState = FormWindowState.Maximized;
-            this.FormBorderStyle = FormBorderStyle.None; // si tu veux cacher la barre Windows
 
             classe_puissance4 = new(adversaire);
             this.textBox1.DataBindings.Add("Text", classe_puissance4, "joueur_actuel", false, DataSourceUpdateMode.OnPropertyChanged);
@@ -36,16 +36,41 @@ namespace Puissance4_Jeu
             boardPanel.SendToBack();
 
             //this.DoubleBuffered = true;
-            this.WindowState = FormWindowState.Maximized;
-            this.FormBorderStyle = FormBorderStyle.None;
         }
+
+        private void Jeu_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            bool retourMenu = true;
+
+            if (e.CloseReason == CloseReason.UserClosing && !partieTerminee)
+            {
+                DialogResult result = MessageBox.Show(
+                    "Voulez-vous vraiment quitter ?",
+                    "Confirmation",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (result == DialogResult.No)
+                {
+                    e.Cancel = true;
+                    retourMenu = false; 
+                }
+            }
+
+            if (retourMenu && Application.OpenForms.Count > 0)
+            {
+                Application.OpenForms[0].Show();
+            }
+        }
+
 
         private void Jeu_Load(object sender, EventArgs e)
         {
             boardPanel.Invalidate();
         }
 
-        private (int,int,int) getOffsets()
+        private (int,int,int) GetOffsets()
         {
             int cellW = (boardPanel.ClientSize.Width - (colonnes - 1) * marge) / colonnes;
             int cellH = (boardPanel.ClientSize.Height - (lignes - 1) * marge) / lignes;
@@ -62,7 +87,7 @@ namespace Puissance4_Jeu
         {
             Graphics g = e.Graphics;
 
-            (int, int, int) offsets = getOffsets();
+            (int, int, int) offsets = GetOffsets();
 
             for (int i = 0; i < lignes; i++)
             {
@@ -86,7 +111,7 @@ namespace Puissance4_Jeu
 
         private void BoardPanel_MouseClick(object sender, MouseEventArgs e)
         {
-            (int,int,int) offsets = getOffsets();
+            (int,int,int) offsets = GetOffsets();
             
 
             for (int i = 0; i < lignes; i++)
@@ -106,17 +131,18 @@ namespace Puissance4_Jeu
                         if (i_jeton.Item1 != -1)
                         {
                             // il y a de la place
-                            Rectangle jeton = new(
+                            r = new(
                                 offsets.Item1 + j * (offsets.Item3 + marge),
                                 offsets.Item2 + i_jeton.Item2 * (offsets.Item3 + marge),
                                 offsets.Item3, offsets.Item3
                             );
                             // redessine juste la case cliquée
-                            boardPanel.Invalidate(jeton);
+                            boardPanel.Invalidate(r);
                             if (i_jeton.Item1 == -2)
                             {
                                 MessageBox.Show("Le " + textBox1.Text + " a gagné");
                                 Application.OpenForms[0].Show();
+                                partieTerminee = true;
                                 this.Close();
                             }
                             else

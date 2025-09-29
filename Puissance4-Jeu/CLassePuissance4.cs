@@ -131,6 +131,7 @@ namespace Puissance4_Jeu
         }
 
         // === ALGORITHME DU ROBOT ===
+        // MinMax avec élagage alpha-beta
 
         public int JouerCoupRobot()
         {
