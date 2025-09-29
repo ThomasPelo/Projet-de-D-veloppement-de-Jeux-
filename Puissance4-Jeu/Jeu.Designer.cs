@@ -34,18 +34,20 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(328, 22);
+            textBox1.Font = new Font("Poppins ExtraBold", 12F, FontStyle.Bold);
+            textBox1.Location = new Point(50, 68);
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
-            textBox1.Size = new Size(125, 27);
+            textBox1.Size = new Size(223, 37);
             textBox1.TabIndex = 0;
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(197, 22);
+            textBox2.Font = new Font("Poppins ExtraBold", 12F, FontStyle.Bold);
+            textBox2.Location = new Point(50, 25);
             textBox2.Name = "textBox2";
             textBox2.ReadOnly = true;
-            textBox2.Size = new Size(125, 27);
+            textBox2.Size = new Size(223, 37);
             textBox2.TabIndex = 2;
             textBox2.Text = "Au tour de :";
             // 
