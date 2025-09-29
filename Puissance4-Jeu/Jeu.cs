@@ -12,7 +12,6 @@ namespace Puissance4_Jeu
         private const int colonnes = 7;
         private const int lignes = 6;
         private const int marge = 10;
-        private const int margeVerticale = 30; // marge en haut et en bas +
 
         public Jeu(int adversaire)
         {
@@ -46,25 +45,31 @@ namespace Puissance4_Jeu
             boardPanel.Invalidate();
         }
 
-        private void BoardPanel_Paint(object sender, PaintEventArgs e)
+        private (int,int,int) getOffsets()
         {
-            Graphics g = e.Graphics;
-
             int cellW = (boardPanel.ClientSize.Width - (colonnes - 1) * marge) / colonnes;
             int cellH = (boardPanel.ClientSize.Height - (lignes - 1) * marge) / lignes;
-            diametre = Math.Min(cellW, cellH);
+            int diametre = Math.Min(cellW, cellH);
 
             int largeurPlateau = colonnes * diametre + (colonnes - 1) * marge;
             int hauteurPlateau = lignes * diametre + (lignes - 1) * marge;
             int offsetX = (boardPanel.ClientSize.Width - largeurPlateau) / 2;
             int offsetY = (boardPanel.ClientSize.Height - hauteurPlateau) / 2;
+            return (offsetX, offsetY, diametre);
+        }
+
+        private void BoardPanel_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+
+            (int, int, int) offsets = getOffsets();
 
             for (int i = 0; i < lignes; i++)
             {
                 for (int j = 0; j < colonnes; j++)
                 {
-                    int x = offsetX + j * (diametre + marge);
-                    int y = offsetY + i * (diametre + marge);
+                    int x = offsets.Item1 + j * (offsets.Item3 + marge);
+                    int y = offsets.Item2 + i * (offsets.Item3 + marge);
 
                     Brush b = classe_puissance4.GetMatrice()[i, j] switch
                     {
@@ -73,32 +78,25 @@ namespace Puissance4_Jeu
                         _ => Brushes.White,
                     };
 
-                    g.FillEllipse(b, x, y, diametre, diametre);
-                    g.DrawEllipse(Pens.Black, x, y, diametre, diametre);
+                    g.FillEllipse(b, x, y, offsets.Item3, offsets.Item3);
+                    g.DrawEllipse(Pens.Black, x, y, offsets.Item3, offsets.Item3);
                 }
             }
         }
 
         private void BoardPanel_MouseClick(object sender, MouseEventArgs e)
         {
-            // Même calcul que dans Paint (important : utiliser e.Location relatif au panel)
-            int cellW = (boardPanel.ClientSize.Width - (colonnes - 1) * marge) / colonnes;
-            int cellH = (boardPanel.ClientSize.Height - (lignes - 1) * marge) / lignes;
-            int d = Math.Min(cellW, cellH);
-
-            int largeurPlateau = colonnes * d + (colonnes - 1) * marge;
-            int hauteurPlateau = lignes * d + (lignes - 1) * marge;
-            int offsetX = (boardPanel.ClientSize.Width - largeurPlateau) / 2;
-            int offsetY = (boardPanel.ClientSize.Height - hauteurPlateau) / 2;
+            (int,int,int) offsets = getOffsets();
+            
 
             for (int i = 0; i < lignes; i++)
             {
                 for (int j = 0; j < colonnes; j++)
                 {
                     Rectangle r = new(
-                        offsetX + j * (d + marge),
-                        offsetY + i * (d + marge),
-                        d, d
+                        offsets.Item1 + j * (offsets.Item3 + marge),
+                        offsets.Item2 + i * (offsets.Item3 + marge),
+                        offsets.Item3, offsets.Item3
                     );
 
                     if (r.Contains(e.Location))
@@ -108,10 +106,10 @@ namespace Puissance4_Jeu
                         if (i_jeton.Item1 != -1)
                         {
                             // il y a de la place
-                            Rectangle jeton = new Rectangle(
-                                offsetX + j * (d + marge),
-                                offsetY + i_jeton.Item2 * (d + marge),
-                                d, d
+                            Rectangle jeton = new(
+                                offsets.Item1 + j * (offsets.Item3 + marge),
+                                offsets.Item2 + i_jeton.Item2 * (offsets.Item3 + marge),
+                                offsets.Item3, offsets.Item3
                             );
                             // redessine juste la case cliquée
                             boardPanel.Invalidate(jeton);
@@ -140,9 +138,9 @@ namespace Puissance4_Jeu
                             if (coord.Item1 != 1)
                             {
                                 r = new Rectangle(
-                                    offsetX + col_ordi * (d + marge),
-                                    offsetY + coord.Item2 * (d + marge),
-                                    d, d
+                                    offsets.Item1 + col_ordi * (offsets.Item3 + marge),
+                                    offsets.Item2 + coord.Item2 * (offsets.Item3 + marge),
+                                    offsets.Item3, offsets.Item3
                                 );
                                 boardPanel.Invalidate(r);
                                 if (coord.Item1 == -2)
