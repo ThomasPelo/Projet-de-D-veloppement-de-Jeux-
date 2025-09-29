@@ -30,6 +30,7 @@
         {
             textBox1 = new TextBox();
             textBox2 = new TextBox();
+            labelTimer = new Label();
             SuspendLayout();
             // 
             // textBox1
@@ -40,6 +41,7 @@
             textBox1.ReadOnly = true;
             textBox1.Size = new Size(223, 30);
             textBox1.TabIndex = 0;
+            textBox1.TabStop = false;
             // 
             // textBox2
             // 
@@ -49,7 +51,19 @@
             textBox2.ReadOnly = true;
             textBox2.Size = new Size(223, 30);
             textBox2.TabIndex = 2;
+            textBox2.TabStop = false;
             textBox2.Text = "Au tour de :";
+            // 
+            // labelTimer
+            // 
+            labelTimer.AutoSize = true;
+            labelTimer.BackColor = Color.Transparent;
+            labelTimer.Location = new Point(50, 118);
+            labelTimer.Name = "labelTimer";
+            labelTimer.Size = new Size(59, 20);
+            labelTimer.TabIndex = 3;
+            labelTimer.Text = "Temps :";
+            labelTimer.Click += label1_Click;
             // 
             // Jeu
             // 
@@ -57,6 +71,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Highlight;
             ClientSize = new Size(1902, 1033);
+            Controls.Add(labelTimer);
             Controls.Add(textBox2);
             Controls.Add(textBox1);
             Name = "Jeu";
@@ -72,5 +87,6 @@
 
         private TextBox textBox1;
         private TextBox textBox2;
+        private Label labelTimer;
     }
 }

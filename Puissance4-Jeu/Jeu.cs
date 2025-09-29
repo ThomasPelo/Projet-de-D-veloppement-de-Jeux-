@@ -12,16 +12,24 @@ namespace Puissance4_Jeu
         private const int lignes = 6;
         private const int marge = 10;
         private bool partieTerminee = false;
+        private System.Windows.Forms.Timer tourTimer;
+        private int tempsRestant;
+        private const int tempsParTour = 10;
+        private bool timerActif;
 
         public Jeu(int adversaire)
         {
             InitializeComponent();
-            this.FormBorderStyle = FormBorderStyle.Sizable;
-            this.WindowState = FormWindowState.Maximized;
 
+            this.ActiveControl = null; 
+
+            // data binding
             classe_puissance4 = new(adversaire);
             this.textBox1.DataBindings.Add("Text", classe_puissance4, "joueur_actuel", false, DataSourceUpdateMode.OnPropertyChanged);
 
+            // affichage
+            this.FormBorderStyle = FormBorderStyle.Sizable;
+            this.WindowState = FormWindowState.Maximized;
             boardPanel = new Panel
             {
                 Dock = DockStyle.Fill,
@@ -35,8 +43,43 @@ namespace Puissance4_Jeu
             this.Controls.Add(boardPanel);
             boardPanel.SendToBack();
 
-            //this.DoubleBuffered = true;
+            // timer 
+            timerActif = true;
+            tempsRestant = tempsParTour;
+            tourTimer = new()
+            {
+                Interval = 1000
+            };
+            tourTimer.Tick += TourTimer_Tick;
+            tourTimer.Start();
+
+            
+
         }
+
+        private void TourTimer_Tick(object sender, EventArgs e)
+        {
+            if (timerActif) tempsRestant--;
+
+            labelTimer.Text = $"Temps restant : {tempsRestant}s";
+            labelTimer.ForeColor = tempsRestant switch
+            {
+                > 5 => Color.Green,
+                > 2 => Color.Orange,
+                _ => Color.Red,
+            };
+
+            if (tempsRestant <= 0)
+            {
+                timerActif = false;
+                tempsRestant = tempsParTour;
+                MessageBox.Show("Temps écoulé ! Tour suivant.");
+                classe_puissance4.AQuiLeTour();
+                timerActif = true;
+
+            }
+        }
+
 
         private void Jeu_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -54,13 +97,22 @@ namespace Puissance4_Jeu
                 if (result == DialogResult.No)
                 {
                     e.Cancel = true;
-                    retourMenu = false; 
+                    retourMenu = false;
                 }
             }
 
             if (retourMenu && Application.OpenForms.Count > 0)
             {
+                TimerStop();
                 Application.OpenForms[0].Show();
+            }
+        }
+
+        private void TimerStop()
+        {
+            if (tourTimer != null && tourTimer.Enabled)
+            {
+                tourTimer.Stop();
             }
         }
 
@@ -70,7 +122,7 @@ namespace Puissance4_Jeu
             boardPanel.Invalidate();
         }
 
-        private (int,int,int) GetOffsets()
+        private (int, int, int) GetOffsets()
         {
             int cellW = (boardPanel.ClientSize.Width - (colonnes - 1) * marge) / colonnes;
             int cellH = (boardPanel.ClientSize.Height - (lignes - 1) * marge) / lignes;
@@ -111,8 +163,8 @@ namespace Puissance4_Jeu
 
         private void BoardPanel_MouseClick(object sender, MouseEventArgs e)
         {
-            (int,int,int) offsets = GetOffsets();
-            
+            (int, int, int) offsets = GetOffsets();
+
 
             for (int i = 0; i < lignes; i++)
             {
@@ -136,10 +188,12 @@ namespace Puissance4_Jeu
                                 offsets.Item2 + i_jeton.Item2 * (offsets.Item3 + marge),
                                 offsets.Item3, offsets.Item3
                             );
+                            tempsRestant = tempsParTour; 
                             // redessine juste la case cliquée
                             boardPanel.Invalidate(r);
                             if (i_jeton.Item1 == -2)
                             {
+                                TimerStop();
                                 MessageBox.Show("Le " + textBox1.Text + " a gagné");
                                 Application.OpenForms[0].Show();
                                 partieTerminee = true;
@@ -168,10 +222,12 @@ namespace Puissance4_Jeu
                                     offsets.Item2 + coord.Item2 * (offsets.Item3 + marge),
                                     offsets.Item3, offsets.Item3
                                 );
+                                tempsRestant = tempsParTour;
                                 boardPanel.Invalidate(r);
                                 if (coord.Item1 == -2)
                                 {
                                     // victoire
+                                    TimerStop();
                                     MessageBox.Show("L'ordinateur a gagné");
                                     Application.OpenForms[0].Show();
                                     this.Close();
@@ -187,6 +243,11 @@ namespace Puissance4_Jeu
                     }
                 }
             }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
