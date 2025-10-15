@@ -92,12 +92,6 @@ namespace TestClassePuissance4
         }
 
         [TestMethod]
-        public void MatchNul()
-        {
-            
-        }
-
-        [TestMethod]
         public void MeilleurCoupRobotDefense()
         {
             CLassePuissance4 cp4 = new(1);
@@ -109,8 +103,23 @@ namespace TestClassePuissance4
             // le robot doit jouer en 0 pour bloquer le puissance 4
             // renvoie la colonne du meilleur coup
             int result = cp4.JouerCoupRobot();
-            Assert.AreEqual(2, result);
+            Assert.AreEqual(0, result);
 
+        }
+
+        [TestMethod]
+        public void MatchNul()
+        {
+            CLassePuissance4 cp4 = new(1);
+            for (int i = 0; i < 7; i++)
+            {
+                for (int j = 0; j < 6; i++)
+                {
+                    cp4.JouerCoup(i);
+                }
+            }
+            bool result = cp4.EstMatchNul();
+            Assert.AreEqual(true, result );
         }
     }
 }
