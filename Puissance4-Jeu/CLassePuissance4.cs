@@ -125,7 +125,7 @@ namespace Puissance4_Jeu
             return count;
         }
 
-        private bool EstMatchNul()
+        public bool EstMatchNul()
         {
             // Vérifier si toutes les colonnes sont pleines
             for (int j = 0; j < 7; j++)
