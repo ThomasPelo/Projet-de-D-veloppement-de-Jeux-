@@ -67,6 +67,7 @@
             textBox3.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
             textBox3.Location = new Point(259, 111);
             textBox3.Name = "textBox3";
+            textBox3.ReadOnly = true;
             textBox3.Size = new Size(300, 30);
             textBox3.TabIndex = 3;
             textBox3.Text = "Choissisez votre adversaire :";

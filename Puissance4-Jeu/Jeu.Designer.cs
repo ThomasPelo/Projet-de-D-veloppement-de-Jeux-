@@ -57,12 +57,16 @@
             // labelTimer
             // 
             labelTimer.AutoSize = true;
-            labelTimer.BackColor = Color.Transparent;
+            labelTimer.BackColor = SystemColors.Control;
+            labelTimer.BorderStyle = BorderStyle.FixedSingle;
+            labelTimer.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold);
             labelTimer.Location = new Point(50, 118);
             labelTimer.Name = "labelTimer";
-            labelTimer.Size = new Size(59, 20);
+            labelTimer.Padding = new Padding(5);
+            labelTimer.Size = new Size(89, 32);
             labelTimer.TabIndex = 3;
             labelTimer.Text = "Temps :";
+            labelTimer.TextAlign = ContentAlignment.MiddleCenter;
             labelTimer.Click += label1_Click;
             // 
             // Jeu

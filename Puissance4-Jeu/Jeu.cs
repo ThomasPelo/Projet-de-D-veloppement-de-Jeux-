@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Puissance4_Jeu
@@ -21,7 +22,7 @@ namespace Puissance4_Jeu
         {
             InitializeComponent();
 
-            this.ActiveControl = null; 
+            this.ActiveControl = null;
 
             // data binding
             classe_puissance4 = new(adversaire);
@@ -52,9 +53,6 @@ namespace Puissance4_Jeu
             };
             tourTimer.Tick += TourTimer_Tick;
             tourTimer.Start();
-
-            
-
         }
 
         private void TourTimer_Tick(object sender, EventArgs e)
@@ -76,7 +74,6 @@ namespace Puissance4_Jeu
                 MessageBox.Show("Temps écoulé ! Tour suivant.");
                 classe_puissance4.AQuiLeTour();
                 timerActif = true;
-
             }
         }
 
@@ -161,10 +158,9 @@ namespace Puissance4_Jeu
             }
         }
 
-        private void BoardPanel_MouseClick(object sender, MouseEventArgs e)
+        private async void BoardPanel_MouseClick(object sender, MouseEventArgs e)
         {
             (int, int, int) offsets = GetOffsets();
-
 
             for (int i = 0; i < lignes; i++)
             {
@@ -188,7 +184,7 @@ namespace Puissance4_Jeu
                                 offsets.Item2 + i_jeton.Item2 * (offsets.Item3 + marge),
                                 offsets.Item3, offsets.Item3
                             );
-                            tempsRestant = tempsParTour; 
+                            tempsRestant = tempsParTour;
                             // redessine juste la case cliquée
                             boardPanel.Invalidate(r);
                             if (i_jeton.Item1 == -2)
@@ -212,6 +208,14 @@ namespace Puissance4_Jeu
                         // si robot
                         if (classe_puissance4.GetAdversaire() == "Robot")
                         {
+                            // On désactive le plateau pour que le joueur ne puisse pas cliquer
+                            // pendant que le robot "réfléchit".
+                            boardPanel.Enabled = false;
+
+                            // On attend 2 secondes (2000 millisecondes) de manière asynchrone.
+                            // L'interface ne se bloque pas pendant ce temps.
+                            await Task.Delay(2000);
+
                             // tour de l'ordi
                             int col_ordi = classe_puissance4.JouerCoupRobot();
                             (int, int) coord = classe_puissance4.JouerCoup(col_ordi);
@@ -238,6 +242,9 @@ namespace Puissance4_Jeu
                                     classe_puissance4.AQuiLeTour();
                                 }
                             }
+
+                            // On réactive le plateau pour le prochain tour du joueur.
+                            boardPanel.Enabled = true;
                         }
                         return;
                     }
