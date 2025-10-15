@@ -12,7 +12,7 @@ namespace Puissance4_Jeu
         private const int lignes = 6;
         private const int marge = 10;
         private bool partieTerminee = false;
-        private System.Windows.Forms.Timer tourTimer;
+        private readonly System.Windows.Forms.Timer tourTimer;
         private int tempsRestant;
         private const int tempsParTour = 10;
         private bool timerActif;
@@ -52,9 +52,6 @@ namespace Puissance4_Jeu
             };
             tourTimer.Tick += TourTimer_Tick;
             tourTimer.Start();
-
-            
-
         }
 
         private void TourTimer_Tick(object sender, EventArgs e)
@@ -80,7 +77,6 @@ namespace Puissance4_Jeu
             }
         }
 
-
         private void Jeu_FormClosing(object sender, FormClosingEventArgs e)
         {
             bool retourMenu = true;
@@ -104,7 +100,7 @@ namespace Puissance4_Jeu
             if (retourMenu && Application.OpenForms.Count > 0)
             {
                 TimerStop();
-                Application.OpenForms[0].Show();
+                Application.OpenForms[0]?.Show();
             }
         }
 
@@ -115,7 +111,6 @@ namespace Puissance4_Jeu
                 tourTimer.Stop();
             }
         }
-
 
         private void Jeu_Load(object sender, EventArgs e)
         {
@@ -180,6 +175,7 @@ namespace Puissance4_Jeu
                     {
                         // on a appuyé sur une colonne mais ou va le jeton ?
                         (int, int) i_jeton = classe_puissance4.ouVaLeJeton(j);
+                        // -1 il y a de la place
                         if (i_jeton.Item1 != -1)
                         {
                             // il y a de la place
@@ -191,11 +187,12 @@ namespace Puissance4_Jeu
                             tempsRestant = tempsParTour; 
                             // redessine juste la case cliquée
                             boardPanel.Invalidate(r);
+                            // -2 c'est gagné
                             if (i_jeton.Item1 == -2)
                             {
                                 TimerStop();
                                 MessageBox.Show("Le " + textBox1.Text + " a gagné");
-                                Application.OpenForms[0].Show();
+                                Application.OpenForms[0]?.Show();
                                 partieTerminee = true;
                                 this.Close();
                             }
@@ -229,12 +226,11 @@ namespace Puissance4_Jeu
                                     // victoire
                                     TimerStop();
                                     MessageBox.Show("L'ordinateur a gagné");
-                                    Application.OpenForms[0].Show();
+                                    Application.OpenForms[0]?.Show();
                                     this.Close();
                                 }
                                 else
                                 {
-                                    // prochain tour
                                     classe_puissance4.AQuiLeTour();
                                 }
                             }

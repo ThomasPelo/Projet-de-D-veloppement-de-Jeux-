@@ -5,18 +5,18 @@ using System.Linq;
 
 namespace Puissance4_Jeu
 {
-    internal class CLassePuissance4 : INotifyPropertyChanged
+    public class CLassePuissance4 : INotifyPropertyChanged
     {
         private string adversaire;
         private int[,] matrice_map;
         private int tour;
-        public string joueur_actuel { get; private set; }
+        private string joueur_actuel;
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        internal CLassePuissance4(int adversaire)
+        public CLassePuissance4(int adversaire)
         {
             this.adversaire = adversaire == 0 ? "Joueur 2" : "Robot";
             joueur_actuel = "Joueur 1";
@@ -41,6 +41,11 @@ namespace Puissance4_Jeu
         public int[,] GetMatrice()
         {
             return matrice_map;
+        }
+
+        public int GetTour()
+        {
+            return tour;
         }
 
         public void AQuiLeTour()
