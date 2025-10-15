@@ -18,16 +18,16 @@ namespace Puissance4_Jeu
 
         public CLassePuissance4(int adversaire)
         {
-            this.adversaire = adversaire == 0 ? "Joueur 2" : "Robot";
-            joueur_actuel = "Joueur 1";
-            matrice_map = new int[6, 7];
+            this.adversaire = adversaire == 0 ? "Joueur 2" : "Robot"; 
+            joueur_actuel = "Joueur 1"; 
+            matrice_map = new int[6, 7]; // Initialisation d'un tableau 6x7 représentant la grille, destiné à stocké la valeur de chaque case
 
             // Initialiser la matrice avec 2 (cases vides)
             for (int i = 0; i < 6; i++)
             {
                 for (int j = 0; j < 7; j++)
                 {
-                    matrice_map[i, j] = 2;
+                    matrice_map[i, j] = 2; 
                 }
             }
             tour = 0;
@@ -50,17 +50,17 @@ namespace Puissance4_Jeu
 
         public void AQuiLeTour()
         {
-            tour = (tour + 1) % 2;
+            tour = (tour + 1) % 2; 
             joueur_actuel = tour == 0 ? "Joueur 1" : adversaire;
             OnPropertyChanged(nameof(joueur_actuel));
         }
 
-        public (int, int) JouerCoup(int colonne)
+        public (int, int) JouerCoup(int colonne) // Selection de la colonne ou l'on joue 
         {
             return ouVaLeJeton(colonne);
         }
 
-        public (int, int) ouVaLeJeton(int colonne)
+        public (int, int) ouVaLeJeton(int colonne) // Renvoie la case vide la plus basse dans la colonne passé en paramètre
         {
             // Vérifier si la colonne est valide
             if (colonne < 0 || colonne >= 7) return (-1, -1);
@@ -91,10 +91,10 @@ namespace Puissance4_Jeu
             return (-1, -1); // Colonne pleine
         }
 
-        public bool VerifierVictoire(int ligne, int colonne)
+        public bool VerifierVictoire(int ligne, int colonne) // Vérifie les alignements autour du pions passé en paramètre
         {
             // Horizontale
-            if (CompterDirection(ligne, colonne, 0, 1) + CompterDirection(ligne, colonne, 0, -1) >= 3) return true;
+            if (CompterDirection(ligne, colonne, 0, 1) + CompterDirection(ligne, colonne, 0, -1) >= 3) return true; 
 
             // Verticale
             if (CompterDirection(ligne, colonne, 1, 0) + CompterDirection(ligne, colonne, -1, 0) >= 3) return true;
@@ -110,16 +110,16 @@ namespace Puissance4_Jeu
 
         private int CompterDirection(int ligne, int colonne, int dLigne, int dColonne)
         {
-            int count = 0;
-            int joueur = matrice_map[ligne, colonne];
-            int r = ligne + dLigne;
-            int c = colonne + dColonne;
-
-            while (r >= 0 && r < 6 && c >= 0 && c < 7 && matrice_map[r, c] == joueur)
+            int count = 0; // Compteur de pions alignés
+            int joueur = matrice_map[ligne, colonne]; // couleur du pion dont on part
+            int r = ligne + dLigne; // Choix de la direction de la ligne ( suivante / précente / même ligne )
+            int c = colonne + dColonne; // Choix de la direction de la colonne à vérifier ( suivante si dColonne vaut +1, précedente si -1 et même colonne si 0 ) 
+            // On vérifie les cases tant qu'on est dans les limites de la matrice et que le pion vérifier est de la même couleur que celui du joueur
+            while (r >= 0 && r < 6 && c >= 0 && c < 7 && matrice_map[r, c] == joueur) 
             {
-                count++;
-                r += dLigne;
-                c += dColonne;
+                count++; // Incrémentation du compteur de pion 
+                r += dLigne; // Passage à la ligne suivante ( en gardant la même direction dLigne )
+                c += dColonne; // Passage à la colonne suivante ( en gardant la même direction dColonne )
             }
 
             return count;
@@ -138,7 +138,7 @@ namespace Puissance4_Jeu
         // === ALGORITHME DU ROBOT ===
         // MinMax avec élagage alpha-beta
 
-        public int JouerCoupRobot()
+        public int JouerCoupRobot() 
         {
             if (adversaire != "Robot") return -1;
 
@@ -146,7 +146,7 @@ namespace Puissance4_Jeu
             return meilleurCoup;
         }
 
-        private int TrouverMeilleurCoup()
+        private int TrouverMeilleurCoup() // Trouve le meilleur coup possible dans la partie
         {
             List<int> coupsPossibles = GetCoupsPossibles();
 
@@ -195,6 +195,10 @@ namespace Puissance4_Jeu
             return meilleurColonne;
         }
 
+        // - Si estMaximisant = true : le tour de l’IA, on cherche à maximiser le score.
+        // - Si estMaximisant = false : le tour du joueur, on cherche à minimiser le score.
+        // - Utilise la profondeur pour limiter la recherche et privilégier les victoires rapides.
+        // - Retourne une évaluation numérique de la position courante.
         private int MinMax(int profondeur, bool estMaximisant, int alpha, int beta)
         {
             // Conditions d'arrêt
@@ -271,7 +275,7 @@ namespace Puissance4_Jeu
             return coups;
         }
 
-        private int SimulerCoup(int colonne, int joueur)
+        private int SimulerCoup(int colonne, int joueur) // Simule l'ajout d'un pion de "joueur" dans la colonne passé en paramètre
         {
             for (int ligne = 5; ligne >= 0; ligne--)
             {
@@ -284,7 +288,7 @@ namespace Puissance4_Jeu
             return -1; // Colonne pleine
         }
 
-        private bool EstCoupGagnant(int colonne, int joueur)
+        private bool EstCoupGagnant(int colonne, int joueur) // Vérifie si la matrice possède une victoire après une simulation de coup
         {
             int ligne = SimulerCoup(colonne, joueur);
             if (ligne == -1) return false;
@@ -294,6 +298,7 @@ namespace Puissance4_Jeu
             return estGagnant;
         }
 
+        // Évalue la position actuelle de la grille pour attribuer un score à l'IA
         private int EvaluerPosition()
         {
             int score = 0;
@@ -316,6 +321,8 @@ namespace Puissance4_Jeu
             return score;
         }
 
+        // Compte le nombre d’alignements (de longueur passé en parametre ) pour un joueur sur la grille
+
         private int CompterAlignements(int joueur, int longueur)
         {
             int count = 0;
@@ -328,7 +335,7 @@ namespace Puissance4_Jeu
 
             return count;
         }
-
+        // Parcourt la grille et compte les alignements d’une certaine longueur dans une direction donnée
         private int CompterAlignementsDirection(int joueur, int longueur, int dLigne, int dColonne)
         {
             int count = 0;
@@ -347,6 +354,7 @@ namespace Puissance4_Jeu
             return count;
         }
 
+        // Vérifie si un alignement d’une certaine longueur est valide pour un joueur depuis une position donnée
         private bool EstAlignementValide(int ligne, int colonne, int joueur, int longueur, int dLigne, int dColonne)
         {
             // Vérifier les limites
