@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Puissance4-Jeu", "Puissance4-Jeu\Puissance4-Jeu.csproj", "{4887B1CE-AF8D-4E54-B86D-E3175D46738B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClassePuissance4", "TestClassePuissance4\TestClassePuissance4.csproj", "{661EC837-4EF0-40F1-9519-E66DDC02BDF4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4887B1CE-AF8D-4E54-B86D-E3175D46738B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4887B1CE-AF8D-4E54-B86D-E3175D46738B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4887B1CE-AF8D-4E54-B86D-E3175D46738B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{661EC837-4EF0-40F1-9519-E66DDC02BDF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{661EC837-4EF0-40F1-9519-E66DDC02BDF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{661EC837-4EF0-40F1-9519-E66DDC02BDF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{661EC837-4EF0-40F1-9519-E66DDC02BDF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
