@@ -10,7 +10,7 @@ namespace Puissance4_Jeu
         private string adversaire;
         private int[,] matrice_map;
         private int tour;
-        private string joueur_actuel;
+        public string joueur_actuel { get; private set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)

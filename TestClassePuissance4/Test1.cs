@@ -107,7 +107,9 @@ namespace TestClassePuissance4
                 cp4.JouerCoup(0);
             }
             // le robot doit jouer en 0 pour bloquer le puissance 4
+            // renvoie la colonne du meilleur coup
             int result = cp4.JouerCoupRobot();
+            Assert.AreEqual(2, result);
 
         }
     }
