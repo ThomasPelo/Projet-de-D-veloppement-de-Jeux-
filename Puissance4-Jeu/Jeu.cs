@@ -172,39 +172,7 @@ namespace Puissance4_Jeu
 
                     if (r.Contains(e.Location))
                     {
-                        // on a appuyé sur une colonne mais ou va le jeton ?
-                        (int, int) i_jeton = classe_puissance4.ouVaLeJeton(j);
-                        // -1 il y a de la place
-                        if (i_jeton.Item1 != -1)
-                        {
-                            // il y a de la place
-                            r = new(
-                                offsets.Item1 + j * (offsets.Item3 + marge),
-                                offsets.Item2 + i_jeton.Item2 * (offsets.Item3 + marge),
-                                offsets.Item3, offsets.Item3
-                            );
-                            tempsRestant = tempsParTour;
-                            // redessine juste la case cliquée
-                            boardPanel.Invalidate(r);
-                            // -2 c'est gagné
-                            if (i_jeton.Item1 == -2)
-                            {
-                                TimerStop();
-                                MessageBox.Show("Le " + textBox1.Text + " a gagné");
-                                Application.OpenForms[0]?.Show();
-                                partieTerminee = true;
-                                this.Close();
-                            }
-                            else
-                            {
-                                classe_puissance4.AQuiLeTour();
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("Colonne pleine !");
-                        }
-
+                        JouerUnCoup(offsets, r, false, j);
                         // si robot
                         if (classe_puissance4.GetAdversaire() == "Robot")
                         {
@@ -212,44 +180,72 @@ namespace Puissance4_Jeu
                             // pendant que le robot "réfléchit".
                             boardPanel.Enabled = false;
 
-                            // On attend 2 secondes (2000 millisecondes) de manière asynchrone.
+                            // On attend 0.5 seconde (500 millisecondes) de manière asynchrone.
                             // L'interface ne se bloque pas pendant ce temps.
-                            await Task.Delay(2000);
-
-                            // tour de l'ordi
-                            int col_ordi = classe_puissance4.JouerCoupRobot();
-                            (int, int) coord = classe_puissance4.JouerCoup(col_ordi);
-                            if (coord.Item1 != 1)
-                            {
-                                r = new Rectangle(
-                                    offsets.Item1 + col_ordi * (offsets.Item3 + marge),
-                                    offsets.Item2 + coord.Item2 * (offsets.Item3 + marge),
-                                    offsets.Item3, offsets.Item3
-                                );
-                                tempsRestant = tempsParTour;
-                                boardPanel.Invalidate(r);
-                                if (coord.Item1 == -2)
-                                {
-                                    // victoire
-                                    TimerStop();
-                                    MessageBox.Show("L'ordinateur a gagné");
-                                    Application.OpenForms[0]?.Show();
-                                    this.Close();
-                                }
-                                else
-                                {
-                                    classe_puissance4.AQuiLeTour();
-                                }
-                            }
-
-                            // On réactive le plateau pour le prochain tour du joueur.
+                            await Task.Delay(500);
+                            JouerUnCoup(offsets, r, true, j);
                             boardPanel.Enabled = true;
                         }
-                        return;
+                        return; 
                     }
                 }
             }
         }
+
+        private void JouerUnCoup((int, int, int) offsets, Rectangle r, bool tourRobot, int colonne)
+        {
+            (int, int) i_jeton;
+            if (tourRobot)
+            {
+                int col_ordi = classe_puissance4.JouerCoupRobot();
+                i_jeton = classe_puissance4.ouVaLeJeton(col_ordi);
+            }
+            else
+            {
+                i_jeton = classe_puissance4.ouVaLeJeton(colonne);
+            }
+            // -1 il y a de la place
+            if (i_jeton.Item1 != -1)
+            {
+                tempsRestant = tempsParTour;
+                r = new(
+                    offsets.Item1 + colonne * (offsets.Item3 + marge),
+                    offsets.Item2 + i_jeton.Item2 * (offsets.Item3 + marge),
+                    offsets.Item3, offsets.Item3
+                );
+
+                // redessine juste la case cliquée
+                boardPanel.Invalidate(r);
+                // -2 c'est gagné
+                if (i_jeton.Item1 == -2)
+                {
+                    AfficherMessageFinDePartie("Le " + textBox1.Text + " a gagné");
+                }
+                else
+                {
+                    classe_puissance4.AQuiLeTour();
+                }
+            }
+            else
+            {
+                AfficherMessage("Colonne pleine !");
+            }
+        }
+
+        private void AfficherMessageFinDePartie(string message)
+        {
+            TimerStop();
+            AfficherMessage(message);
+            Application.OpenForms[0]?.Show();
+            partieTerminee = true;
+            this.Close();
+        }
+
+        private static void AfficherMessage(string message)
+        {
+            MessageBox.Show(message);
+        }
+
 
         private void label1_Click(object sender, EventArgs e)
         {

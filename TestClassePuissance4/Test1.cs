@@ -54,7 +54,7 @@ namespace TestClassePuissance4
             // on rejoue dans la même colonne
             (int, int) result = cp4.JouerCoup(0);
             Assert.AreEqual(0, result.Item1);
-            // colonne non vide donc le jeton va en bas à la ligne 4
+            // colonne non vide donc le jeton à la ligne 4
             Assert.AreEqual(4, result.Item2);
         }
 
@@ -140,8 +140,8 @@ namespace TestClassePuissance4
             int colonne = cp4.JouerCoupRobot();
             // colonne 0 expected
             (int, int) result = cp4.JouerCoup(0);
-            // ligne 2 expected
             // -2 = victoire
+            // ligne 2 expected
             Assert.AreEqual(-2, result.Item1);
             Assert.AreEqual(2, result.Item2);
             Assert.AreEqual(0, colonne);
