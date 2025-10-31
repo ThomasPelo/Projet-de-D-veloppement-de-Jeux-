@@ -7,6 +7,7 @@ namespace TestClassePuissance4
         [TestMethod]
         public void TourInit()
         {
+            // le 1 désigne le mode contre un robot
             CLassePuissance4 cp4 = new(1);
             // le tour commence à 0 donc c'est le joueur 1
             Assert.AreEqual(0, cp4.GetTour());
@@ -94,6 +95,9 @@ namespace TestClassePuissance4
         [TestMethod]
         public void MatchNul()
         {
+            // ici on cherche à savoir si quand la grille est remplie le déclenchement 
+            // de match nul fonctionne
+            // 
             CLassePuissance4 cp4 = new(1);
             for (int col = 0; col < 7; col++)
             {

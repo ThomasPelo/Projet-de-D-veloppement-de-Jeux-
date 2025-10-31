@@ -21,7 +21,7 @@ namespace Puissance4_Jeu
         public Jeu(int adversaire)
         {
             InitializeComponent();
-
+            this.DoubleBuffered = true;
             this.ActiveControl = null;
 
             // data binding
@@ -41,6 +41,7 @@ namespace Puissance4_Jeu
             boardPanel.MouseClick += BoardPanel_MouseClick;
             boardPanel.Resize += (s, e) => boardPanel.Invalidate();
 
+            
             this.Controls.Add(boardPanel);
             boardPanel.SendToBack();
 
@@ -73,7 +74,11 @@ namespace Puissance4_Jeu
                 tempsRestant = tempsParTour;
                 MessageBox.Show("Temps écoulé ! Tour suivant.");
                 classe_puissance4.AQuiLeTour();
+                if (classe_puissance4.GetAdversaire() == "Robot") {
+                    JouerUnCoup(GetOffsets(), true, -1);
+                }
                 timerActif = true;
+                boardPanel.Invalidate();
             }
         }
 
@@ -172,19 +177,19 @@ namespace Puissance4_Jeu
 
                     if (r.Contains(e.Location))
                     {
-                        JouerUnCoup(offsets, r, false, j);
+                        JouerUnCoup(offsets, false, j);
                         // si robot
                         if (classe_puissance4.GetAdversaire() == "Robot")
                         {
                             // On désactive le plateau pour que le joueur ne puisse pas cliquer
                             // pendant que le robot "réfléchit".
-                            boardPanel.Enabled = false;
+                            //boardPanel.Enabled = false;
 
                             // On attend 0.5 seconde (500 millisecondes) de manière asynchrone.
                             // L'interface ne se bloque pas pendant ce temps.
-                            await Task.Delay(500);
-                            JouerUnCoup(offsets, r, true, j);
-                            boardPanel.Enabled = true;
+                            //await Task.Delay(500);
+                            JouerUnCoup(offsets, true, -1);
+                            //boardPanel.Enabled = true;
                         }
                         return; 
                     }
@@ -192,30 +197,32 @@ namespace Puissance4_Jeu
             }
         }
 
-        private void JouerUnCoup((int, int, int) offsets, Rectangle r, bool tourRobot, int colonne)
+        private void JouerUnCoup((int, int, int) offsets, bool tourRobot, int colonne)
         {
             (int, int) i_jeton;
+            int col_joue = colonne;
             if (tourRobot)
             {
-                int col_ordi = classe_puissance4.JouerCoupRobot();
-                i_jeton = classe_puissance4.ouVaLeJeton(col_ordi);
+                col_joue = classe_puissance4.JouerCoupRobot();
+                i_jeton = classe_puissance4.ouVaLeJeton(col_joue);
             }
             else
             {
-                i_jeton = classe_puissance4.ouVaLeJeton(colonne);
+                i_jeton = classe_puissance4.ouVaLeJeton(col_joue);
             }
             // -1 il y a de la place
             if (i_jeton.Item1 != -1)
             {
                 tempsRestant = tempsParTour;
-                r = new(
-                    offsets.Item1 + colonne * (offsets.Item3 + marge),
+                Rectangle r = new(
+                    offsets.Item1 + col_joue * (offsets.Item3 + marge),
                     offsets.Item2 + i_jeton.Item2 * (offsets.Item3 + marge),
                     offsets.Item3, offsets.Item3
                 );
 
                 // redessine juste la case cliquée
                 boardPanel.Invalidate(r);
+                boardPanel.Update();
                 // -2 c'est gagné
                 if (i_jeton.Item1 == -2)
                 {
